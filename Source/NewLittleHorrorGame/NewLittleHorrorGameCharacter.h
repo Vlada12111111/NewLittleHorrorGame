@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <InventoryComponent.h>
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "NewLittleHorrorGameCharacter.generated.h"
+
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -47,6 +49,8 @@ class ANewLittleHorrorGameCharacter : public ACharacter
 public:
 	ANewLittleHorrorGameCharacter();
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UInventoryComponent* Inventory;
 
 protected:
 
