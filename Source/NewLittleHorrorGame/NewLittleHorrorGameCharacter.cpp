@@ -71,7 +71,7 @@ void ANewLittleHorrorGameCharacter::BeginPlay()
 		UItem* It2 = NewObject<UItem>();
 
 		It2->name = "it2";
-		It2->ID = 1;
+		It2->ID = 2;
 
 		UItem* It3 = NewObject<UItem>();
 
@@ -83,8 +83,6 @@ void ANewLittleHorrorGameCharacter::BeginPlay()
 		Inventory->addItemInFreePlace(It1);
 		Inventory->addItemInFreePlace(It2);
 		Inventory->addItemInFreePlace(It3);
-
-		Inventory->print();
 	}
 }
 
