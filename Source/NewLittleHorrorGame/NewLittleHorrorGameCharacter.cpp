@@ -54,6 +54,8 @@ ANewLittleHorrorGameCharacter::ANewLittleHorrorGameCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
 	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+
+	LookRotateActivity = true;
 }
 
 void ANewLittleHorrorGameCharacter::BeginPlay()
@@ -150,7 +152,11 @@ void ANewLittleHorrorGameCharacter::Look(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+
+		if (LookRotateActivity) {
+			AddControllerYawInput(LookAxisVector.X);
+			AddControllerPitchInput(LookAxisVector.Y);
+		}
+		
 	}
 }

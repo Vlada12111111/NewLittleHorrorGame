@@ -52,6 +52,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInventoryComponent* Inventory;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool LookRotateActivity;
+
 protected:
 
 	/** Called for movement input */
