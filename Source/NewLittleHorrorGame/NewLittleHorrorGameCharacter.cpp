@@ -63,29 +63,6 @@ void ANewLittleHorrorGameCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	if (Inventory) {
-
-		UItem* It1 = NewObject<UItem>();
-
-		It1->name = "it1";
-		It1->ID = 1;
-
-		UItem* It2 = NewObject<UItem>();
-
-		It2->name = "it2";
-		It2->ID = 2;
-
-		UItem* It3 = NewObject<UItem>();
-
-		It3->name = "it3";
-		It3->ID = 1;
-
-
-		
-		Inventory->addItemInFreePlace(It1);
-		Inventory->addItemInFreePlace(It2);
-		Inventory->addItemInFreePlace(It3);
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////
