@@ -52,7 +52,7 @@ public:
 	void removeItemBySlotIndex(int SlotIndex);
 
 	UFUNCTION(BlueprintCallable)
-	void print();
+	void InventoryPrint();
 
 	UFUNCTION(BlueprintCallable)
 	TArray<int32> getIDItemList();

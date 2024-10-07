@@ -39,24 +39,9 @@ ANewLittleHorrorGameCharacter::ANewLittleHorrorGameCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
 
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	
-
-
-
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
-
 	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 
 	LookRotateActivity = true;
-}
-
-void ANewLittleHorrorGameCharacter::BeginPlay()
-{
-	// Call the base class  
-	Super::BeginPlay();
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -130,4 +115,9 @@ void ANewLittleHorrorGameCharacter::Look(const FInputActionValue& Value)
 		}
 		
 	}
+}
+
+UInventoryComponent* ANewLittleHorrorGameCharacter::getIvenwntoryComponent()
+{
+	return Inventory;
 }

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InventoryInterface.h"
 #include <InventoryComponent.h>
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
@@ -18,15 +19,9 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class ANewLittleHorrorGameCharacter : public ACharacter
+class ANewLittleHorrorGameCharacter : public ACharacter , public IInventoryInterface
 {
 	GENERATED_BODY()
-
-	/** Camera boom positioning the camera behind the character */
-	
-
-	/** Follow camera */
-	
 	
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -53,6 +48,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool LookRotateActivity;
 
+	UFUNCTION()
+	UInventoryComponent* getIvenwntoryComponent();
+
 protected:
 
 	/** Called for movement input */
@@ -65,14 +63,5 @@ protected:
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
-	// To add mapping context
-	virtual void BeginPlay();
-
-public:
-	/** Returns CameraBoom subobject **/
-	
-	/** Returns FollowCamera subobject **/
-	
 };
 

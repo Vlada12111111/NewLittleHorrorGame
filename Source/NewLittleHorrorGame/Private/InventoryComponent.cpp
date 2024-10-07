@@ -85,7 +85,7 @@ void UInventoryComponent::removeItemBySlotIndex(int Index) {
 }
 
 
-void UInventoryComponent::print() {
+void UInventoryComponent::InventoryPrint() {
 
 	for (int a = 0; a != inventory.Num(); a++) {
 		if (GEngine) {

@@ -10,9 +10,8 @@
 void UInventoryWidget::UpdateItemSlotByIndex(int Index) {
     if (inventorySlot[Index]) {
 
-        ANewLittleHorrorGameCharacter* PlayerPawn = Cast<ANewLittleHorrorGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-        inventorySlot[Index]->Item = PlayerPawn->Inventory->inventory[Index];
-
+        UInventoryComponent* InventoryCom = (Cast<IInventoryInterface>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))->getIvenwntoryComponent();
+        inventorySlot[Index]->Item = InventoryCom->inventory[Index];
 
         FItemInfoStructure* Row = DataTableIDtoInfo->FindRow<FItemInfoStructure>(FName(*FString::FromInt(inventorySlot[Index]->Item->ID)), "");
 
@@ -29,10 +28,11 @@ void UInventoryWidget::UpdateItemSlotByIndex(int Index) {
 void UInventoryWidget::UpdateHotItemSlotByIndex(int Index) {
     if (HotInventorySlot[Index]) {
 
-        ANewLittleHorrorGameCharacter* PlayerPawn = Cast<ANewLittleHorrorGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-        if (PlayerPawn->Inventory->HotItem[Index]!=-1) {
+        UInventoryComponent* InventoryCom = (Cast<IInventoryInterface>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))->getIvenwntoryComponent();
+
+        if (InventoryCom->HotItem[Index]!=-1) {
         
-            HotInventorySlot[Index]->Item = PlayerPawn->Inventory->inventory[PlayerPawn->Inventory->HotItem[Index]];
+            HotInventorySlot[Index]->Item = InventoryCom->inventory[InventoryCom->HotItem[Index]];
 
 
             FItemInfoStructure* Row = DataTableIDtoInfo->FindRow<FItemInfoStructure>(FName(*FString::FromInt(HotInventorySlot[Index]->Item->ID)), "");
@@ -47,13 +47,6 @@ void UInventoryWidget::UpdateHotItemSlotByIndex(int Index) {
         
         }
         else {
-        
-        
-
-
-
-
-
 
             HotInventorySlot[Index]->Item = NewObject<UItem>();
 
@@ -67,27 +60,22 @@ void UInventoryWidget::UpdateHotItemSlotByIndex(int Index) {
 
                 }
             }
-
-
-
-        
         }
-        
     }
 }
 
 void UInventoryWidget::setDefoult()
 {
 
-    ANewLittleHorrorGameCharacter* PlayerPawn = Cast<ANewLittleHorrorGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+    UInventoryComponent* InventoryCom = (Cast<IInventoryInterface>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))->getIvenwntoryComponent();
 
-    if (PlayerPawn) {
+    if (InventoryCom) {
 
         for (int a = 0; a < inventorySlot.Num(); a++) {
 
             if (inventorySlot[a]) {
 
-                inventorySlot[a]->Item = PlayerPawn->Inventory->inventory[a];
+                inventorySlot[a]->Item = InventoryCom->inventory[a];
 
             }
         }
@@ -97,20 +85,13 @@ void UInventoryWidget::setDefoult()
 
             if (HotInventorySlot[a]) {
 
-                if(PlayerPawn->Inventory->HotItem[a]!=-1){
-                    HotInventorySlot[a]->Item = PlayerPawn->Inventory->inventory[PlayerPawn->Inventory->HotItem[a]];
+                if(InventoryCom->HotItem[a]!=-1){
+                    HotInventorySlot[a]->Item = InventoryCom->inventory[InventoryCom->HotItem[a]];
                 }
                 else {
                     HotInventorySlot[a]->Item = NewObject<UItem>();
                 }
-
-                
-
             }
         }
-
-
-
     }
-
 }
