@@ -8,108 +8,79 @@ UInventoryComponent::UInventoryComponent()
 
 	PrimaryComponentTick.bCanEverTick = true;
 
-}
-
-void UInventoryComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
 	for (int a = 0; a < ItemSlotNumber; a++) {
-		inventory.Add(NewObject<UItem>());
+		Inventory.Add(-1);
 	}
 	for (int a = 0; a < HotItemSlotNumber; a++) {
-		HotItem.Add(-1);
+		HotInventory.Add(-1);
 	}
 
 }
 
-int UInventoryComponent::addItemInFreePlace(UItem* NewItem) {
 
-	if (NewItem) {
+int UInventoryComponent::addItemInFreePlace(int NewItemID) {
 
-		for (int a = 0; a < inventory.Num(); a++) {
-			if (inventory[a]) {
-				if (inventory[a]->ID == -1) {
+		for (int a = 0; a < Inventory.Num(); a++) {//set item in first empty position
+				if (Inventory[a]== -1) {
 
-					inventory[a] = NewItem;
-					addHotItemInFreePlace(NewItem, a);
+					Inventory[a] = NewItemID;
+					setItemInHotInventory(a);
 					return a;
 
 				};
-			}
 		}
-	}
-	return -1;
+	return -1;//if inventary is full
 }
 
-int UInventoryComponent::addHotItemInFreePlace(UItem* NewItem, int RealObject) {
+int UInventoryComponent::setItemInHotInventory(int refresh) {
+		for (int a = 0; a < HotInventory.Num(); a++) {//set item in first empty position
+				if (HotInventory[a] == -1) {
 
-	if (NewItem) {
-
-		for (int a = 0; a < HotItem.Num(); a++) {
-			if (HotItem[a]) {
-				if (HotItem[a] == -1) {
-
-					HotItem[a] = RealObject;
+					HotInventory[a] = refresh;
 					return a;
 
 				};
-			}
 		}
-	}
-	return -1;
+	return -1;//if inventary is full
 }
 
-void UInventoryComponent::addItemInIndexPlace(UItem* NewItem, int index) {
-
-	if (NewItem) {
-		inventory[index] = NewItem;
-	}
+void UInventoryComponent::addItemInIndexPlace(int NewItemID, int index) {
+		Inventory[index] = NewItemID;
+		RefreshHotInventory();
 }
 
 
-void UInventoryComponent::removeItemByID(int ID) {
-	for (int a = 0; a < inventory.Num(); a++) {
-		if (inventory[a] && inventory[a]->ID == ID) {
-			inventory[a] = NewObject<UItem>();
+void UInventoryComponent::removeItem(int ID) {
+	for (int a = 0; a < Inventory.Num(); a++) {
+		if (Inventory[a] == ID) {
+			Inventory[a] = -1;
 			return;
 		}
 	}
 }
 
 void UInventoryComponent::removeItemBySlotIndex(int Index) {
-
-	inventory[Index] = NewObject<UItem>();
-	return;
-
+	Inventory[Index] = -1;
 }
+
+
 
 
 void UInventoryComponent::InventoryPrint() {
-
-	for (int a = 0; a != inventory.Num(); a++) {
+	for (int a = 0; a != Inventory.Num(); a++) {
 		if (GEngine) {
-
-			if (inventory[a]) { GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Item: %s"), *inventory[a]->name)); }
-			else {
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Item:---")));
-			}
+			if (Inventory[a]) { GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Item: %s"), Inventory[a])); }
 		}
-
 	}
 }
 
-
-TArray<int32> UInventoryComponent::getIDItemList() {
-
-	TArray<int32> IDs;
-
-	for (int a = 0; a < inventory.Num(); a++) {
-		if (inventory[a]) {
-			if (inventory[a]->ID) { IDs.Add(inventory[a]->ID); }
-			else { IDs.Add(-1); }
+void UInventoryComponent::RefreshHotInventory()
+{
+	for (int a = 0; a != HotInventory.Num(); a++) {
+		if (HotInventory[a]!=-1) {
+			if (Inventory[HotInventory[a]] == -1) {
+				HotInventory[a] = -1;
+			}
 		}
 	}
-
-	return IDs;
 }

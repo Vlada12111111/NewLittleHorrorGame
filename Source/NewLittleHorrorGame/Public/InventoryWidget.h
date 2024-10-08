@@ -36,11 +36,28 @@ public:
 	UDataTable* DataTableIDtoInfo;
 
 	UFUNCTION(BlueprintCallable)
-	void UpdateItemSlotByIndex(int Index);
+	void UpdateItemSlot(int Index);
 
 	UFUNCTION(BlueprintCallable)
-	void UpdateHotItemSlotByIndex(int Index);
+	void UpdateItemAndHotItemSlots(int Index);
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateHotItemSlot(int Index);
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateAllHotItemSlot();
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateAllItemSlot();
 
 	UFUNCTION(BlueprintCallable)
 	void setDefoult();
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateHotItemByOnecChenged(int InventeryNamber);
+
+	UFUNCTION()
+	int getCorrectHotItemID(UInventoryComponent* inventory, int index);
+
+
 };

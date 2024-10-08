@@ -7,91 +7,75 @@
 #include <ItemInfo.h>
 
 
-void UInventoryWidget::UpdateItemSlotByIndex(int Index) {
-    if (inventorySlot[Index]) {
-
+void UInventoryWidget::UpdateItemSlot(int Index) {
+    
         UInventoryComponent* InventoryCom = (Cast<IInventoryInterface>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))->getIvenwntoryComponent();
-        inventorySlot[Index]->Item = InventoryCom->inventory[Index];
+        inventorySlot[Index]->ItemID = InventoryCom->Inventory[Index]; // set correct ID
 
-        FItemInfoStructure* Row = DataTableIDtoInfo->FindRow<FItemInfoStructure>(FName(*FString::FromInt(inventorySlot[Index]->Item->ID)), "");
+        FItemInfoStructure* Row = DataTableIDtoInfo->FindRow<FItemInfoStructure>(FName(*FString::FromInt(inventorySlot[Index]->ItemID)), "");
 
-        if (Row) {
-            UTexture2D* LoadedTexture = Row->Image.LoadSynchronous();
-            if (LoadedTexture && inventorySlot[Index]->TitleImage) {
-                inventorySlot[Index]->TitleImage->SetBrushFromTexture(LoadedTexture);
-
-            }
+        if (Row && inventorySlot[Index]->TitleImage) { // set correct immage
+                inventorySlot[Index]->TitleImage->SetBrushFromTexture(Row->Image.LoadSynchronous());
         }
+}
+
+void UInventoryWidget::UpdateHotItemSlot(int Index) {
+   
+        UInventoryComponent* InventoryCom = (Cast<IInventoryInterface>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))->getIvenwntoryComponent();
+        HotInventorySlot[Index]->ItemID = getCorrectHotItemID(InventoryCom, Index);// set correct ID
+
+        FItemInfoStructure* Row = DataTableIDtoInfo->FindRow<FItemInfoStructure>(FName(*FString::FromInt(HotInventorySlot[Index]->ItemID)), "");
+
+        if (Row && HotInventorySlot[Index]->TitleImage) {// set correct immage
+                    HotInventorySlot[Index]->TitleImage->SetBrushFromTexture(Row->Image.LoadSynchronous());
+        }
+}
+
+void UInventoryWidget::UpdateItemAndHotItemSlots(int Index)
+{
+    UpdateItemSlot(Index);
+    UpdateAllHotItemSlot();
+}
+
+void UInventoryWidget::UpdateAllItemSlot()
+{
+    for (int indexCounter = 0; indexCounter < inventorySlot.Num(); indexCounter++) {
+        UpdateItemSlot(indexCounter);
     }
 }
 
-void UInventoryWidget::UpdateHotItemSlotByIndex(int Index) {
-    if (HotInventorySlot[Index]) {
-
-        UInventoryComponent* InventoryCom = (Cast<IInventoryInterface>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))->getIvenwntoryComponent();
-
-        if (InventoryCom->HotItem[Index]!=-1) {
-        
-            HotInventorySlot[Index]->Item = InventoryCom->inventory[InventoryCom->HotItem[Index]];
-
-
-            FItemInfoStructure* Row = DataTableIDtoInfo->FindRow<FItemInfoStructure>(FName(*FString::FromInt(HotInventorySlot[Index]->Item->ID)), "");
-
-            if (Row) {
-                UTexture2D* LoadedTexture = Row->Image.LoadSynchronous();
-                if (LoadedTexture && HotInventorySlot[Index]->TitleImage) {
-                    HotInventorySlot[Index]->TitleImage->SetBrushFromTexture(LoadedTexture);
-
-                }
-            }
-        
-        }
-        else {
-
-            HotInventorySlot[Index]->Item = NewObject<UItem>();
-
-
-            FItemInfoStructure* Row = DataTableIDtoInfo->FindRow<FItemInfoStructure>(FName(*FString::FromInt(-1)), "");
-
-            if (Row) {
-                UTexture2D* LoadedTexture = Row->Image.LoadSynchronous();
-                if (LoadedTexture && HotInventorySlot[Index]->TitleImage) {
-                    HotInventorySlot[Index]->TitleImage->SetBrushFromTexture(LoadedTexture);
-
-                }
-            }
-        }
+void UInventoryWidget::UpdateAllHotItemSlot()
+{
+    for (int indexCounter = 0; HotInventorySlot.Num()> indexCounter; indexCounter++) {
+        UpdateHotItemSlot(indexCounter);
     }
 }
 
 void UInventoryWidget::setDefoult()
 {
+    UpdateAllItemSlot();
+    UpdateAllHotItemSlot();
+}
 
+void UInventoryWidget::UpdateHotItemByOnecChenged(int InventeryNamber)
+{
     UInventoryComponent* InventoryCom = (Cast<IInventoryInterface>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))->getIvenwntoryComponent();
 
-    if (InventoryCom) {
-
-        for (int a = 0; a < inventorySlot.Num(); a++) {
-
-            if (inventorySlot[a]) {
-
-                inventorySlot[a]->Item = InventoryCom->inventory[a];
-
-            }
-        }
-
-
-        for (int a = 0; a < HotInventorySlot.Num(); a++) {
-
-            if (HotInventorySlot[a]) {
-
-                if(InventoryCom->HotItem[a]!=-1){
-                    HotInventorySlot[a]->Item = InventoryCom->inventory[InventoryCom->HotItem[a]];
-                }
-                else {
-                    HotInventorySlot[a]->Item = NewObject<UItem>();
-                }
-            }
+    for (int indexCounter = 0; InventoryCom->HotInventory.Num() > indexCounter; indexCounter++) {//if someone has refresh in hot item update it
+        if (InventoryCom->HotInventory[indexCounter] == InventeryNamber) {
+            UpdateHotItemSlot(indexCounter);
+            return;
         }
     }
 }
+
+int UInventoryWidget::getCorrectHotItemID(UInventoryComponent* inventory, int index)
+{
+    if (inventory->HotInventory[index] != -1) { // if HotInventory isn`t refresh in object (ID) return null object (ID=-1)
+        return inventory->Inventory[inventory->HotInventory[index]];
+    }
+    else {
+        return -1;
+    }
+}
+

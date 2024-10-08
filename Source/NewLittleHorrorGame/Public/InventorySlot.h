@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include <Item.h>
 #include <Components/Image.h>
 #include "Components/CanvasPanel.h"
 #include "InventorySlot.generated.h"
@@ -20,5 +19,5 @@ public:
 	UImage* TitleImage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UItem* Item;
+	int ItemID;
 };
