@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include <Item.h>
 #include "Components/ActorComponent.h"
 #include "InventoryComponent.generated.h"
 
@@ -20,7 +19,7 @@ public:
 	UInventoryComponent();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray <UItem*> inventory = {};
+	TArray <int> Inventory = {};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int HotItemSlotNumber = 5;
@@ -29,24 +28,20 @@ public:
 	int ItemSlotNumber = 15;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray <int> HotItem = {};
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	TArray <int> HotInventory = {};
 
 public:	
 	UFUNCTION(BlueprintCallable)
-	int addItemInFreePlace(UItem* NewItem);
+	int addItemInFreePlace(int NewItemID);
 
 	UFUNCTION(BlueprintCallable)
-	int addHotItemInFreePlace(UItem* NewItem, int RealObject);
+	int setItemInHotInventory(int refresh);
 
 	UFUNCTION(BlueprintCallable)
-	void addItemInIndexPlace(UItem* NewItem, int index);
+	void addItemInIndexPlace(int NewItem, int index);
 
 	UFUNCTION(BlueprintCallable)
-	void removeItemByID(int ID);
+	void removeItem(int ID);
 
 	UFUNCTION(BlueprintCallable)
 	void removeItemBySlotIndex(int SlotIndex);
@@ -55,6 +50,5 @@ public:
 	void InventoryPrint();
 
 	UFUNCTION(BlueprintCallable)
-	TArray<int32> getIDItemList();
-		
+	void RefreshHotInventory();
 };
